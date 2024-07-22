@@ -5,6 +5,6 @@ const router = Router()
 
 router.route("/register").post(registerUser)
 
-router.route("/getuser").get(fetchUserDetails)
+router.route("/getuser/:email").get(fetchUserDetails)
 
 export default router

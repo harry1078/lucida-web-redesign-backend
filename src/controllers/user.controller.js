@@ -34,7 +34,8 @@ const registerUser = asyncHandler( async (req,res) => {
 })
 
 const fetchUserDetails = asyncHandler( async (req,res) => {
-   const {email} = req.body
+   const {email} = req.params
+
    if(!email) {
       throw new ApiError(400, "Email is required")
    }
