@@ -1,5 +1,4 @@
 import { User } from "../models/user.model.js";
-import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 const registerUser = asyncHandler( async (req,res) => {
@@ -7,7 +6,7 @@ const registerUser = asyncHandler( async (req,res) => {
 
    //check if any of the field is empty
    if([name,phone,email].some((field) => field?.toString().trim() === "")){
-    throw new ApiError(400, "All fields are required")
+      res.status(400).json({error: "All fields are required" })
    }
 
    //check if user already exists
@@ -16,7 +15,7 @@ const registerUser = asyncHandler( async (req,res) => {
    })
 
    if(existedUser) {
-    throw new ApiError(400, "User with same email or phone number already exists")
+      res.status(400).json({error: "User with same email or phone number already exists" })
    }
 
    //add user data to db
@@ -27,7 +26,7 @@ const registerUser = asyncHandler( async (req,res) => {
    //check if user data is added
    const createdUser = await User.findById(user._id)
    if(!createdUser) {
-    throw new ApiError(500, "Something went wrong while registering the user")
+      res.status(500).json({error: "Something went wrong while registering the user" })
    }
 
    return res.status(200).json(createdUser)
@@ -37,12 +36,12 @@ const fetchUserDetails = asyncHandler( async (req,res) => {
    const {email} = req.params
 
    if(!email) {
-      throw new ApiError(400, "Email is required")
+      res.status(400).json({error: "Email is required" })
    }
 
    const user = await User.findOne({email})
    if(!user) {
-      throw new ApiError(404, "User not found")
+      res.status(404).json({error: "User not found" })
    }
    return res.status(200).json(user)
 })
